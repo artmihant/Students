@@ -13,3 +13,4 @@ python_basics_v3 - полная справка по синтаксису
 https://github.com/rougier/numpy-100
 
 https://pythonworld.ru/numpy/100-exercises.html
+
