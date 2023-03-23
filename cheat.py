@@ -96,7 +96,7 @@ False or True  # => True
 -5 or 0  # => -5
 0 == False  # => True
 2 == True  # => False
-1 == True  # => True
+1 != True  # => False
 
 # Отрицание not
 not True  # => False
@@ -499,6 +499,7 @@ while x < 4:
 # Конструкция with - as не забудет его закрыть, и его дескриптор не будет висеть, блокируя файл на уровне OC.
 
 with open("myfile.txt", 'r') as f:
+    f.read()
     for line in f:
         print(line)
 
