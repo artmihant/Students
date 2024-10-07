@@ -56,7 +56,7 @@ def init_animation():
     LineCalculated.set_data(T[0], P_cl[0])
     LineAnalitical.set_data(T[0], P_an[0])
 
-    return (LineCalculated,LineAnalitical)
+    return (LineCalculated, LineAnalitical)
 
 
 def loop_animation(i):

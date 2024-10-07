@@ -13,11 +13,16 @@ def D(s):
     v = s[1]
     return np.array(( v, -2*Gamma*v-Omega**2*np.sin(u)))
 
+Count = 13**2
 
-U_0 = 0
-V_0 = 2
+U_0 = np.array(np.linspace(-3,3,13).tolist()*13)
+V_0 = U_0.reshape((13,13)).transpose().reshape((-1))
 
-S_0 = np.array((U_0, V_0), dtype=np.float32)
+
+S_0 = np.zeros((Count, 2), dtype=np.float32)
+
+S_0[:,0] = U_0
+S_0[:,1] = V_0
 
 # NUMERIC #
 
@@ -29,7 +34,7 @@ StepsNumber = int( (T_max-T_min) / DeltaT )
 
 # Make state history array
 
-STrajectory = np.zeros((StepsNumber+1 , 2), dtype=np.float32)
+STrajectory = np.zeros((StepsNumber+1 , Count, 2), dtype=np.float32)
 
 STrajectory[0] = S_0
 
@@ -55,30 +60,22 @@ def average_exp_imp_step(s):
 def half_point_step(s):
     #RK2
     d1 = DeltaT*D(s)
-    d2 = DeltaT*D(s+d1/2)
+    d2 = DeltaT*D(s+d1*1/2)
     return s + d2
-
-def RK4_step(s):
-    #RK4
-    d1 = DeltaT*D(s)
-    d2 = DeltaT*D(s+d1/2)
-    d3 = DeltaT*D(s+d2/2)
-    d4 = DeltaT*D(s+d3)
-
-    return s + ( d1 + 2*d2 + 2*d3 + d4 )/6
 
 
 # Prosessing #
 
 ## Euler ##
-for i in range(1, StepsNumber+1 ):
-    STrajectory[i] = RK4_step(STrajectory[i-1])
+for i in range(1, StepsNumber+1):
+    for j in range(Count):
+        STrajectory[i,j] = half_point_step(STrajectory[i-1,j])
 
 
-UTrajectory = STrajectory[:, 0]
-VTrajectory = STrajectory[:, 1]
+UTrajectory = STrajectory[:, :,0]
+VTrajectory = STrajectory[:, :,1]
 
-Enegry = VTrajectory**2 + Omega**2 * 2*(1-np.cos(UTrajectory))
+# Enegry = VTrajectory**2 + Omega**2 * UTrajectory**2
 
 # plt.plot(TimeAxes, Enegry)
 
@@ -88,27 +85,32 @@ Enegry = VTrajectory**2 + Omega**2 * 2*(1-np.cos(UTrajectory))
 
 # axs = fig.subplots(2)
 
-fig, axs  = plt.subplots(3, layout='constrained')
+fig, ax  = plt.subplots()
 
 # ax_uv: plt.axes.Axes = axs[0]
 # ax_phase: plt.axis.Axis = axs[1]
 
-axs[0].plot(TimeAxes, UTrajectory, label='U')
-axs[0].plot(TimeAxes, VTrajectory, label='V')
-axs[0].set(xlabel='T', ylabel='U,V', title='U(t) и V(t)')
+# axs[0].plot(TimeAxes, UTrajectory, label='U')
+# axs[0].plot(TimeAxes, VTrajectory, label='V')
+# axs[0].set(xlabel='T', ylabel='U,V', title='U(t) и V(t)')
 
-axs[1].plot(TimeAxes, Enegry)
-axs[1].set(xlabel='T', ylabel='E', title='E(t)')
+# axs[1].plot(TimeAxes, Enegry)
+# axs[1].set(xlabel='T', ylabel='E', title='E(t)')
 
-axs[2].plot(UTrajectory, VTrajectory)
-axs[2].set(xlabel='U', ylabel='V', title='Фазовая траектория')
+for i in range(Count):
+    ax.plot(UTrajectory[:,i], VTrajectory[:,i], color='black')
+
+ax.set(xlabel='U', ylabel='V', title='Фазовая траектория')
+
+plt.xlim(-3,3)
+plt.ylim(-3,3)
 
 # ax1 = 
 # ax.set(xlabel='U', ylabel='Y', )
 
 # plt.plot(TimeAxes, VTrajectory)
 
-# plt.show()
+plt.show()
 
 
 def show_pendulum_move(UTrajectory):
@@ -145,4 +147,4 @@ def show_pendulum_move(UTrajectory):
     )
     plt.show()
 
-show_pendulum_move(UTrajectory)
+# show_pendulum_move(UTrajectory)

@@ -1,0 +1,12 @@
+{
+    "editor.codeActionsOnSave": {
+        "source.organizeImports": "never",
+        "source.addMissingImports": "never"
+    },
+    "references.preferredLocation": "view",
+    "vue3snippets.enable-compile-vue-file-on-did-save-code": false,
+    "python.languageServer": "Pylance",
+    "python.analysis.typeCheckingMode": "basic",
+    "python.analysis.include": ["server"],
+
+}
