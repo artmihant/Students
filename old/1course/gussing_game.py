@@ -1,7 +1,6 @@
 from random import randint
 
 def guessing_game():
-    """ Программа играет с пользователем в угадайку """
     answer = randint(0, 100)
 
     while True:

@@ -15,7 +15,7 @@ def D(s):
 
 
 U_0 = 0
-V_0 = 2
+V_0 = 1
 
 S_0 = np.array((U_0, V_0), dtype=np.float32)
 
@@ -23,13 +23,13 @@ S_0 = np.array((U_0, V_0), dtype=np.float32)
 
 DeltaT = 0.1
 
-T_min, T_max = 0, 100
+T_min, T_max = 0, 1000
 
 StepsNumber = int( (T_max-T_min) / DeltaT )
 
 # Make state history array
 
-STrajectory = np.zeros((StepsNumber+1 , 2), dtype=np.float32)
+STrajectory = np.zeros((StepsNumber+1 , 2))
 
 STrajectory[0] = S_0
 
@@ -80,18 +80,9 @@ VTrajectory = STrajectory[:, 1]
 
 Enegry = VTrajectory**2 + Omega**2 * 2*(1-np.cos(UTrajectory))
 
-# plt.plot(TimeAxes, Enegry)
 
-# plt.plot(TimeAxes, UTrajectory)
-# plt.plot(TimeAxes, VTrajectory)
-
-
-# axs = fig.subplots(2)
 
 fig, axs  = plt.subplots(3, layout='constrained')
-
-# ax_uv: plt.axes.Axes = axs[0]
-# ax_phase: plt.axis.Axis = axs[1]
 
 axs[0].plot(TimeAxes, UTrajectory, label='U')
 axs[0].plot(TimeAxes, VTrajectory, label='V')
@@ -103,16 +94,11 @@ axs[1].set(xlabel='T', ylabel='E', title='E(t)')
 axs[2].plot(UTrajectory, VTrajectory)
 axs[2].set(xlabel='U', ylabel='V', title='Фазовая траектория')
 
-# ax1 = 
-# ax.set(xlabel='U', ylabel='Y', )
-
-# plt.plot(TimeAxes, VTrajectory)
-
-# plt.show()
 
 
 def show_pendulum_move(UTrajectory):
-
+    import matplotlib.pyplot as plt
+    import matplotlib.animation as animation
     L = 1
 
     Trajectory = (-L*np.cos(UTrajectory), L*np.sin(UTrajectory))
@@ -139,9 +125,9 @@ def show_pendulum_move(UTrajectory):
         fig=fig, 
         func=loop_animation, 
         frames=StepsNumber, 
-        interval=0.02,
+        interval=40,
         repeat=True,
-        repeat_delay=1000
+        repeat_delay=0
     )
     plt.show()
 
